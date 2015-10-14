@@ -1,0 +1,32 @@
+{
+  "name": "datingServer",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:mjhea0/passport-local-express4.git"
+  },
+  "author": "Michael Herman <michael@mherman.org>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "chai": "*",
+    "cookie-parser": "*",
+    "debug": "*",
+    "express": "^4.13.3",
+    "express-session": "*",
+    "jade": "*",
+    "jwt-simple": "^0.3.1",
+    "mocha": "*",
+    "mongoose": "*",
+    "morgan": "^1.6.1",
+    "passport": "*",
+    "passport-local": "*",
+    "passport-local-mongoose": "*",
+    "serve-favicon": "*",
+    "should": "*"
+  }
+}
