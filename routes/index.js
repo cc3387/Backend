@@ -3,7 +3,7 @@ var passport = require('passport');
 var Account = require('../models/account');
 var auth = require('../routes/auth');
 var router = express.Router();
-
+var query = Account.find({});
 
 router.get('/', function (req, res) {
     res.render('index', { user : req.user });
@@ -58,43 +58,59 @@ router.get('/logout', function(req, res) {
 
 
 //Return all the users that are registered on terminal, finding ways to send to iphone
-router.post('/display_all', function(req,res){
+//router.post('/display_all', function(req,res){
 Account.find({}, function(err, users) {
   if (err) throw err;
 
   // object of all the users
   console.log(users);
   });
-});
+//});
 
-//Return all the user information after login
-router.post('/user', function(req,res){
-console.log("This is the info of the logged in user ...");
+
+var ulongitude = 0;
+var ulatitude = 0;
+
+//Try Some Matching information by matching the username
+router.post('/matching', function(req,res){
+console.log("Lets do some matching ...");
 Account.find({ username: req.body.username }, function(err, users) {
   if (err) throw err;
-  // object of all the users
+  
+  ulongitude = users[0].longitude;
+  ulatitude = users[0].latitude;
+
+  console.log(ulongitude);
+  console.log(ulatitude);
+
+  //Sending information to Matching
+  router.post('/Matching', function(req,res){
+  Account.find({ latitude : {$lt : ulatitude}}, //gte for greater than
+  function(error, users){  
+  if(error){res.send(error);}
+  else{res.send(users);}
+  //Displaying all the information
+  console.log(users);
+  });
+});
+});
+});
+
+//Using the latitude and longitude to find users
+router.get('/Matching', function(req,res){
+console.log("Lets find some people ...");
+
+  Account.find({ latitude : {$lt : ulatitude}},
+  function(error, users){  
+  if(error){res.send(error);}
+  else{res.send(users);}
+  //Displaying all the information
   console.log(users);
   });
 });
 
-//Try Some Matching information by matching the username
-router.post('/match', function(req,res){
-console.log("Lets do some matching ...");
-Account.find({ username: req.body.username }, function(err, users) {
-  if (err) throw err;
-  //pass users object to RawData
-  var longitude = users[0].longitude;
-  var latitude = users[0].latitude;
-  console.log(longitude);
-  console.log(latitude);
-
-  });
-});
-
-
-
 //Remove users
-/*Account.findOneAndRemove({ username: 'clementc' }, function(err) {
+/*Account.findOneAndRemove({ username: 'portiac' }, function(err) {
   if (err) throw err;
 
   // we have deleted the user
