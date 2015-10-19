@@ -70,6 +70,7 @@ Account.find({}, function(err, users) {
 
 var ulongitude = 0;
 var ulatitude = 0;
+var login_user = "";
 
 //Try Some Matching information by matching the username
 router.post('/matching', function(req,res){
@@ -79,13 +80,17 @@ Account.find({ username: req.body.username }, function(err, users) {
   
   ulongitude = users[0].longitude;
   ulatitude = users[0].latitude;
-
+  login_user = users[0].username;
   console.log(ulongitude);
   console.log(ulatitude);
 
   //Sending information to Matching
   router.post('/Matching', function(req,res){
-  Account.find({ latitude : {$lt : ulatitude}}, //gte for greater than
+  Account.find({ latitude : {$lt : ulatitude + 1},
+                 latitude : {$gt : ulatitude - 1},
+                 longitude : {$lt : ulongitude + 1},
+                 longitude : {$gt : ulongitude - 1},
+                 username: {$ne: login_user}}, //gte for greater and equal to
   function(error, users){  
   if(error){res.send(error);}
   else{res.send(users);}
@@ -100,7 +105,11 @@ Account.find({ username: req.body.username }, function(err, users) {
 router.get('/Matching', function(req,res){
 console.log("Lets find some people ...");
 
-  Account.find({ latitude : {$lt : ulatitude}},
+  Account.find({ latitude : {$lt : ulatitude + 1},
+                 latitude : {$gt : ulatitude - 1},
+                 longitude : {$lt : ulongitude + 1},
+                 longitude : {$gt : ulongitude - 1},
+                 username: {$ne: login_user}}, 
   function(error, users){  
   if(error){res.send(error);}
   else{res.send(users);}
@@ -110,7 +119,7 @@ console.log("Lets find some people ...");
 });
 
 //Remove users
-/*Account.findOneAndRemove({ username: 'portiac' }, function(err) {
+/*Account.findOneAndRemove({ username: 'Seb' }, function(err) {
   if (err) throw err;
 
   // we have deleted the user
